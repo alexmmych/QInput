@@ -7,14 +7,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-//Initial test of png rendering
+    //Initial test of png rendering
 
     QString url = R"(/home/opensuse/Documents/Keyboard.png)";
     QPixmap img(url);
 
     ui->label->setPixmap(img);
     ui->label->setScaledContents(true);
-
+    setAttribute(Qt::WA_TranslucentBackground, true);
 }
 
 MainWindow::~MainWindow()
