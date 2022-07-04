@@ -4,7 +4,7 @@ THE CORRECT GCC COMPILE LINE IS:
 
 ```
 
-g++ /home/opensuse/libuiohook/include/test.cpp -o test_hook  -Wl,-rpath,'$ORIGIN': libuiohook.so.1.2.0 -L/usr/lib64 -lX11 -lXtst -lxkbcommon-x11 -lxkbcommon -lX11-xcb -lxcb -lxkbfile -lXt -lX11 -lXtst -lxkbcommon-x11 -lxkbcommon -lX11-xcb -lxcb -lxkbfile -lXt -lXinerama
+g++ test.cpp -o test_hook -I include/  -Wl,-rpath,'$ORIGIN': libuiohook.so.1.2.0 -L/usr/lib64 -lX11 -lXtst -lxkbcommon-x11 -lxkbcommon -lX11-xcb -lxcb -lxkbfile -lXt -lX11 -lXtst -lxkbcommon-x11 -lxkbcommon -lX11-xcb -lxcb -lxkbfile -lXt -lXinerama;
 
 ```
 
