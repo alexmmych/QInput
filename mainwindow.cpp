@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <iterator>
+#include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -31,8 +33,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     resources += QString::fromStdString(names.at(0));
 
+    std::vector<std::string>::iterator itr;
+
     for (std::string name : names) {
-        std::cout << name << std::endl;
+        //Create an iterator of the current name
+        itr = std::find(names.begin(),names.end(),name);
+        int index = std::distance(names.begin(),itr);
+        //Names will be divsibles of 3
+        if (index % 3 == 0) {
+            std::cout << "At: " << index/3 << "; ";
+            std::cout << name << std::endl;
+        }
     }
 
     QString url = (resources);
