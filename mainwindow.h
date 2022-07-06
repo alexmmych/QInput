@@ -13,6 +13,15 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+
+    struct key {
+        std::string name;
+        int x;
+        int y;
+    };
+
+    std::vector<key> CreateKeys();
+
     ~MainWindow();
 
 private:

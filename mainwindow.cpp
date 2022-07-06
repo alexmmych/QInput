@@ -17,11 +17,44 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    std::vector<key> keys = CreateKeys();
+
+    for (MainWindow::key key : keys) {
+        //Get the resource location
+        QString resources = "/home/opensuse/keyboard-listener/resources/Dark/";
+
+        resources += QString::fromStdString(key.name);
+
+        QString url = (resources);
+        QPixmap img(url);
+
+        //Create a label for that image
+        QLabel *label = new QLabel(this);
+
+        label->setPixmap(img);
+        label->setScaledContents(true);
+
+        //Set it's position
+        label->setGeometry(key.x,key.y,img.width(),img.height());
+    }
+
+
+    //Make background transparent
+    setAttribute(Qt::WA_TranslucentBackground, true);
+}
+
+std::vector<MainWindow::key> MainWindow::CreateKeys() {
     //Open Key map
     std::ifstream file("layer-map.txt");
 
     std::vector<std::string> names;
     std::string input;
+
+    std::vector<MainWindow::key> keys;
+
+    std::string KeyName;
+    int KeyX;
+    int KeyY;
 
     while (file >> input){ //return file
         names.push_back(input);
@@ -37,45 +70,30 @@ MainWindow::MainWindow(QWidget *parent)
 
         //Names will be divisibles of 3 (switch_case == 0) while X values will have 1 as rest and Y will have 2
 
-        std::cout << "At: " << index/3 << "; ";
+        //std::cout << "At: " << index/3 << "; ";
 
         switch(switch_case) {
             case 0: {
-                std::cout << "Name: " << name << std::endl;
+                KeyName = name;
                 break;
             }
             case 1: {
-                std::cout << "X: " << name.substr(1,name.length()-2) << std::endl;
+                KeyX = std::stoi(name.substr(1,name.length()-2));
                 break;
             }
             case 2: {
-                std::cout << "Y: " << name.substr(0,name.length()-1) << std::endl;
+                KeyY = std::stoi(name.substr(0,name.length()-1));
+
+                key keyObj = {KeyName,KeyX,KeyY};
+                keys.push_back(keyObj);
+
                 break;
             }
         }
         std::advance(itr,1);
     }
 
-
-    //Get the desired png
-    QString resources = "/home/opensuse/keyboard-listener/resources/Dark/";
-
-    resources += QString::fromStdString(names.at(0));
-
-    QString url = (resources);
-    QPixmap img(url);
-
-    //Create a label for that image
-    QLabel *label = new QLabel(this);
-
-    label->setPixmap(img);
-    label->setScaledContents(false);
-
-    //Set it's position
-    label->setGeometry(0,0,img.width(),img.height());
-
-    //Make background transparent
-    setAttribute(Qt::WA_TranslucentBackground, true);
+    return keys;
 }
 
 MainWindow::~MainWindow()
