@@ -6,6 +6,10 @@ extern "C" {
 #include <wchar.h>
 #include <stdio.h>
 
+class Hook {
+public:
+    Hook();
+};
 
 bool logger_proc(unsigned int level, const char *format, ...) {
     bool status = false;
@@ -86,13 +90,14 @@ void dispatch_proc(uiohook_event * const event) {
     }
 }
 
-int main() {
+Hook::Hook() {
 
     // Set the logger callback for library output.
     hook_set_logger_proc(&logger_proc);
 
     // Set the event callback for uiohook events.
     hook_set_dispatch_proc(&dispatch_proc);
+    
     int status = hook_run();
 
     switch (status) {
@@ -161,8 +166,8 @@ int main() {
             logger_proc(LOG_LEVEL_ERROR, "An unknown hook error occurred. (%#X)", status);
             break;
     }
+}
 
-    return status;
-
-     return status;
+int main() {
+    Hook newHook;
 }
