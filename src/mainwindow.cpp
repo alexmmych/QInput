@@ -1,9 +1,10 @@
-#include "mainwindow.h"
+#include "include/mainwindow.h"
 #include "./ui_mainwindow.h"
 
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>
+#include <QDir>
 
 #include <fstream>
 #include <string>
@@ -21,8 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     for (MainWindow::key key : keys) {
         //Get the resource location
-        QString resources = "/home/opensuse/keyboard-listener/resources/Dark/";
+        QString resources = QCoreApplication::applicationDirPath();
 
+        resources += "/resources/Dark/";
         resources += QString::fromStdString(key.name);
 
         QString url = (resources);
@@ -31,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
         //Create a label for that image
         QLabel *label = new QLabel(this);
 
+        label->setObjectName(QString::fromStdString(key.name));
         label->setPixmap(img);
         label->setScaledContents(true);
 
@@ -45,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 std::vector<MainWindow::key> MainWindow::CreateKeys() {
     //Open Key map
-    std::ifstream file("layer-map.txt");
+    std::ifstream file("resources/Layout/layer-map.txt");
 
     std::vector<std::string> names;
     std::string input;
