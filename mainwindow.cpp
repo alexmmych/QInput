@@ -10,7 +10,6 @@
 #include <vector>
 #include <iostream>
 #include <iterator>
-#include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -28,23 +27,40 @@ MainWindow::MainWindow(QWidget *parent)
         names.push_back(input);
     }
 
+    std::vector<std::string>::iterator itr = names.begin();;
+
+    for (std::string name : names) {
+        //Create an iterator of the current name
+        int index = std::distance(names.begin(),itr);
+
+        int switch_case = index % 3;
+
+        //Names will be divisibles of 3 (switch_case == 0) while X values will have 1 as rest and Y will have 2
+
+        std::cout << "At: " << index/3 << "; ";
+
+        switch(switch_case) {
+            case 0: {
+                std::cout << "Name: " << name << std::endl;
+                break;
+            }
+            case 1: {
+                std::cout << "X: " << name.substr(1,name.length()-2) << std::endl;
+                break;
+            }
+            case 2: {
+                std::cout << "Y: " << name.substr(0,name.length()-1) << std::endl;
+                break;
+            }
+        }
+        std::advance(itr,1);
+    }
+
+
     //Get the desired png
     QString resources = "/home/opensuse/keyboard-listener/resources/Dark/";
 
     resources += QString::fromStdString(names.at(0));
-
-    std::vector<std::string>::iterator itr;
-
-    for (std::string name : names) {
-        //Create an iterator of the current name
-        itr = std::find(names.begin(),names.end(),name);
-        int index = std::distance(names.begin(),itr);
-        //Names will be divsibles of 3
-        if (index % 3 == 0) {
-            std::cout << "At: " << index/3 << "; ";
-            std::cout << name << std::endl;
-        }
-    }
 
     QString url = (resources);
     QPixmap img(url);
