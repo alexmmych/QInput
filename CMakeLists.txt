@@ -15,16 +15,16 @@ set(CMAKE_CXX_COMPILER "g++")
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+enable_language(C)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         src/main.cpp
         src/mainwindow.cpp
-        src/hook.cpp
-        include/mainwindow.h
-        include/uiohook.h
         src/mainwindow.ui
+        include/mainwindow.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -69,6 +69,8 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib DESTINATION ${CMAKE_CURRENT_BINARY_DIR
 
 #libuihook copy:
 if(UNIX AND NOT APPLE)
+    find_package(PkgConfig REQUIRED)
+
     pkg_check_modules(X11 REQUIRED x11)
     target_include_directories(test PRIVATE "${X11_INCLUDE_DIRS}")
     target_link_libraries(test PRIVATE "${X11_LDFLAGS}")
@@ -76,6 +78,12 @@ if(UNIX AND NOT APPLE)
     pkg_check_modules(XTST REQUIRED xtst)
     target_include_directories(test PRIVATE "${XTST_INCLUDE_DIRS}")
     target_link_libraries(test PRIVATE "${XTST_LDFLAGS}")
+
+    include(CheckLibraryExists)
+    check_library_exists(Xtst XRecordQueryVersion "" HAVE_XRECORD)
+
+    include(CheckIncludeFile)
+    check_include_file(X11/extensions/record.h HAVE_RECORD_H "-include X11/Xlib.h")
 
     option(USE_XKB_COMMON "X Keyboard Common Extension (default: ON)" ON)
     if(USE_XKB_COMMON)
@@ -103,6 +111,23 @@ if(UNIX AND NOT APPLE)
         add_compile_definitions(test PRIVATE USE_XT)
         target_include_directories(test PRIVATE "${XT_INCLUDE_DIRS}")
         target_link_libraries(test PRIVATE "${XT_LDFLAGS}")
+    endif()
+
+
+    option(USE_XF86MISC "XFree86-Misc X Extension (default: OFF)" OFF)
+    if(USE_XF86MISC)
+        pkg_check_modules(XF86MISC REQUIRED Xxf86misc)
+        add_compile_definitions(test PRIVATE USE_XF86MISC)
+        target_include_directories(test PRIVATE "${XF86MISC_INCLUDE_DIRS}")
+        target_link_libraries(test "${XF86MISC_LDFLAGS}")
+    endif()
+
+    option(USE_XRANDR "XRandR Extension (default: OFF)" OFF)
+    if(USE_XRANDR)
+        pkg_check_modules(XRANDR REQUIRED xrandr)
+        add_compile_definitions(test PRIVATE USE_XRANDR)
+        target_include_directories(test PRIVATE "${XRANDR_INCLUDE_DIRS}")
+        target_link_libraries(test "${XRANDR_LDFLAGS}")
     endif()
 
     option(USE_XINERAMA "Xinerama Extension (default: ON)" ON)
