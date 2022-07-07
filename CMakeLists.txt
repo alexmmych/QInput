@@ -24,7 +24,9 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/mainwindow.cpp
         src/mainwindow.ui
+        src/hook.cpp
         include/mainwindow.h
+        include/hook.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -56,106 +58,18 @@ target_link_libraries(keyboard-listener PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 set(INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(keyboard-listener PRIVATE ${INCLUDE_DIRECTORY})
 
-set(SOURCES src/hook.cpp ${INCLUDE_DIRECTORY}/uiohook.h)
+set(SOURCES src/hook.cpp ${INCLUDE_DIRECTORY}/uiohook.h ${INCLUDE_DIRECTORY}/hook.h)
 
 #Wl rpath
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-rpath, ${CMAKE_CURRENT_BINARY_DIR}/lib/libuiohook.so.1.2.0")
+#add_executable(test ${SOURCES})
 
-add_executable(test ${SOURCES})
+#target_include_directories(test PRIVATE ${INCLUDE_DIRECTORY})
 
 #Directories
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-#libuihook copy:
-if(UNIX AND NOT APPLE)
-    find_package(PkgConfig REQUIRED)
-
-    pkg_check_modules(X11 REQUIRED x11)
-    target_include_directories(test PRIVATE "${X11_INCLUDE_DIRS}")
-    target_link_libraries(test PRIVATE "${X11_LDFLAGS}")
-
-    pkg_check_modules(XTST REQUIRED xtst)
-    target_include_directories(test PRIVATE "${XTST_INCLUDE_DIRS}")
-    target_link_libraries(test PRIVATE "${XTST_LDFLAGS}")
-
-    include(CheckLibraryExists)
-    check_library_exists(Xtst XRecordQueryVersion "" HAVE_XRECORD)
-
-    include(CheckIncludeFile)
-    check_include_file(X11/extensions/record.h HAVE_RECORD_H "-include X11/Xlib.h")
-
-    option(USE_XKB_COMMON "X Keyboard Common Extension (default: ON)" ON)
-    if(USE_XKB_COMMON)
-        pkg_check_modules(XKB_COMMON REQUIRED xkbcommon-x11)
-        add_compile_definitions(test PRIVATE USE_XKB_COMMON)
-        target_include_directories(test PRIVATE "${XKB_COMMON_INCLUDE_DIRS}")
-        target_link_libraries(test PRIVATE "${XKB_COMMON_LDFLAGS}")
-
-        pkg_check_modules(X11_XCB REQUIRED x11-xcb)
-        target_include_directories(test PRIVATE "${X11_XCB_INCLUDE_DIRS}")
-        target_link_libraries(test PRIVATE "${X11_XCB_LDFLAGS}")
-    endif()
-
-    option(USE_XKB_FILE "X Keyboard File Extension (default: ON)" ON)
-    if(USE_XKB_FILE)
-        pkg_check_modules(XKB_FILE REQUIRED xkbfile)
-        add_compile_definitions(test PRIVATE USE_XKB_FILE)
-        target_include_directories(test PRIVATE "${XKB_FILE_INCLUDE_DIRS}")
-        target_link_libraries(test PRIVATE "${XKB_FILE_LDFLAGS}")
-    endif()
-
-    option(USE_XT "X Toolkit Extension (default: ON)" ON)
-    if(USE_XT)
-        pkg_check_modules(XT REQUIRED xt)
-        add_compile_definitions(test PRIVATE USE_XT)
-        target_include_directories(test PRIVATE "${XT_INCLUDE_DIRS}")
-        target_link_libraries(test PRIVATE "${XT_LDFLAGS}")
-    endif()
-
-
-    option(USE_XF86MISC "XFree86-Misc X Extension (default: OFF)" OFF)
-    if(USE_XF86MISC)
-        pkg_check_modules(XF86MISC REQUIRED Xxf86misc)
-        add_compile_definitions(test PRIVATE USE_XF86MISC)
-        target_include_directories(test PRIVATE "${XF86MISC_INCLUDE_DIRS}")
-        target_link_libraries(test "${XF86MISC_LDFLAGS}")
-    endif()
-
-    option(USE_XRANDR "XRandR Extension (default: OFF)" OFF)
-    if(USE_XRANDR)
-        pkg_check_modules(XRANDR REQUIRED xrandr)
-        add_compile_definitions(test PRIVATE USE_XRANDR)
-        target_include_directories(test PRIVATE "${XRANDR_INCLUDE_DIRS}")
-        target_link_libraries(test "${XRANDR_LDFLAGS}")
-    endif()
-
-    option(USE_XINERAMA "Xinerama Extension (default: ON)" ON)
-    if(USE_XINERAMA)
-        pkg_check_modules(XINERAMA REQUIRED xinerama)
-        add_compile_definitions(test PRIVATE USE_XINERAMA)
-        target_include_directories(test PRIVATE "${XINERAMA_INCLUDE_DIRS}")
-        target_link_libraries(test PRIVATE "${XINERAMA_LDFLAGS}")
-    endif()
-
-    option(USE_XRECORD_ASYNC "XRecord Asynchronous API (default: OFF)" OFF)
-    if(USE_XRECORD_ASYNC)
-        add_compile_definitions(test PRIVATE USE_XRECORD_ASYNC)
-    endif()
-
-    option(USE_XTEST "XTest API (default: ON)" ON)
-    if(USE_XTEST)
-        # XTest API is provided by Xtst
-        add_compile_definitions(test PRIVATE USE_XTEST)
-    endif()
-
-    if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        option(USE_EVDEV "Generic Linux input driver (default: ON)" ON)
-        if(USE_EVDEV)
-            add_compile_definitions(test PRIVATE USE_EVDEV)
-        endif()
-    endif()
-endif()
 
 set_target_properties(keyboard-listener PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

@@ -1,15 +1,8 @@
-extern "C" {
-    #include "include/uiohook.h"
-}
+#include "include/hook.h"
 
 #include <iostream>
 #include <wchar.h>
 #include <stdio.h>
-
-class Hook {
-public:
-    Hook();
-};
 
 bool logger_proc(unsigned int level, const char *format, ...) {
     bool status = false;
@@ -166,8 +159,4 @@ Hook::Hook() {
             logger_proc(LOG_LEVEL_ERROR, "An unknown hook error occurred. (%#X)", status);
             break;
     }
-}
-
-int main() {
-    Hook newhook;
 }
