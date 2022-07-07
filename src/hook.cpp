@@ -169,5 +169,5 @@ Hook::Hook() {
 }
 
 int main() {
-    Hook newHook;
+    Hook newhook;
 }
