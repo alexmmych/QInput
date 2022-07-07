@@ -1,6 +1,0 @@
-/home/opensuse/keyboard-listener/build/CMakeFiles/keyboard-listener.dir
-/home/opensuse/keyboard-listener/build/CMakeFiles/test.dir
-/home/opensuse/keyboard-listener/build/CMakeFiles/edit_cache.dir
-/home/opensuse/keyboard-listener/build/CMakeFiles/rebuild_cache.dir
-/home/opensuse/keyboard-listener/build/CMakeFiles/keyboard-listener_autogen.dir
-/home/opensuse/keyboard-listener/build/CMakeFiles/test_autogen.dir
