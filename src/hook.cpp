@@ -4,6 +4,8 @@
 #include <wchar.h>
 #include <stdio.h>
 
+uint16_t Hook::Rawcode;
+
 bool logger_proc(unsigned int level, const char *format, ...) {
     bool status = false;
 
@@ -62,7 +64,8 @@ void dispatch_proc(uiohook_event * const event) {
             }
         case EVENT_KEY_RELEASED:
         case EVENT_KEY_TYPED:
-            printf("    Rawcode: %#06x \n",event->data.keyboard.rawcode);
+            Hook::Rawcode = event->data.keyboard.rawcode;
+            printf("    Rawcode: %#06x \n",Hook::Rawcode);
             break;
         case EVENT_MOUSE_PRESSED:
                 std::cout << "Mouse Button: " << event->data.mouse.button << "  Mouse Clicks: " << event->data.mouse.clicks << "\n" ;

@@ -5,4 +5,5 @@ extern "C" {
 class Hook {
 public:
     Hook();
+    static uint16_t Rawcode;
 };
