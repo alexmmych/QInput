@@ -17,7 +17,11 @@ int main(int argc, char *argv[])
 
     Hook newHook;
 
-    std::cout << "Escape Keycode: " << VC_ESCAPE;
+    newHook.RunHook();
+
+    if (Hook::Keycode == VC_ESCAPE) { 
+        std::cout << "Escaped" << '\n';
+    }
 
     return a.exec();
 }

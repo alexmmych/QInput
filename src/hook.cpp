@@ -32,9 +32,6 @@ void dispatch_proc(uiohook_event * const event) {
 
         if(event->type == EVENT_KEY_RELEASED)
             std::cout << "Keycode: " << event->data.keyboard.keycode << '\n';
-        if(event->type == EVENT_KEY_TYPED)
-            printf("Keychar: %lc", (wint_t) event->data.keyboard.keychar);
-
     switch (event->type) {
         case EVENT_KEY_PRESSED:
             // If the escape key is pressed, naturally terminate the program.
@@ -62,6 +59,8 @@ void dispatch_proc(uiohook_event * const event) {
                         break;
                 }
             }
+                Hook::Keycode = event->data.keyboard.keycode;
+        break;
         case EVENT_MOUSE_PRESSED:
                 std::cout << "Mouse Button: " << event->data.mouse.button << "  Mouse Clicks: " << event->data.mouse.clicks << "\n" ;
             break;
