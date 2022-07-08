@@ -1,17 +1,6 @@
 #include "include/mainwindow.h"
 #include "./ui_mainwindow.h"
 
-#include <QLabel>
-#include <QString>
-#include <QLineEdit>
-#include <QDir>
-
-#include <fstream>
-#include <string>
-#include <vector>
-#include <iostream>
-#include <iterator>
-
 const uint16_t MainWindow::KeyOrder[] = {
     VC_ESCAPE,
     VC_F1,
@@ -84,6 +73,7 @@ const uint16_t MainWindow::KeyOrder[] = {
 };
 
 std::vector<MainWindow::key> MainWindow::keys;
+QVector<QLabel*> MainWindow::labels;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -113,13 +103,44 @@ MainWindow::MainWindow(QWidget *parent)
 
         //Set it's position
         label->setGeometry(key.x,key.y,img.width(),img.height());
-    }
 
-    Hook newHook;
+        MainWindow::labels.append(label);
+    }
 
     //Make background transparent
     setAttribute(Qt::WA_TranslucentBackground, true);
+
+    //Create a hook instance
+    Hook newHook;
+
+    //Create hook thread
     hook_thread = std::thread(&Hook::RunHook,newHook);
+
+}
+
+void MainWindow::PressKeys(int index) {
+
+    QString resources = QCoreApplication::applicationDirPath();
+
+    resources += "/resources/Light/";
+
+    std::string newString = keys.at(index).name;
+
+    size_t pos = (newString.find("Dark"));
+
+    newString.replace(pos,4,"Light");
+
+    resources += QString::fromStdString(newString);
+
+    QString url = (resources);
+    QPixmap lightImg(url);
+    QPixmap darkImg = labels[index]->pixmap();
+
+    MainWindow::labels[index]->setPixmap(lightImg);
+
+    usleep(80000);
+
+    MainWindow::labels[index]->setPixmap(darkImg);
 }
 
 void MainWindow::ReadKeys() {
@@ -128,9 +149,9 @@ void MainWindow::ReadKeys() {
 
     if (it != keys.end()) {
         int index = it - keys.begin();
-         std::cout << "Pressed: " << keys.at(index).name << std::endl;
+        std::cout << "Pressed: " << keys.at(index).name << std::endl;
+        PressKeys(index);
     }
-    
 }
 
 

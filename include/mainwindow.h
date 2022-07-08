@@ -7,6 +7,19 @@
 
 #include <QMainWindow>
 
+#include <QLabel>
+#include <QString>
+#include <QLineEdit>
+#include <QDir>
+#include <QVector>
+
+#include <fstream>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <iterator>
+#include <unistd.h>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,9 +40,11 @@ public:
     };
 
     const static uint16_t KeyOrder[];
+    static std::vector<key> keys;
+    static QVector<QLabel*> labels;
 
     void CreateKeys();
-    static std::vector<key> keys;
+    static void PressKeys(int index);
     static void ReadKeys();
     
     std::thread hook_thread;
