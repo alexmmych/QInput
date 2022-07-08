@@ -3,7 +3,10 @@
 
 #include "hook.h"
 
+#include <thread>
+
 #include <QMainWindow>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,15 +21,18 @@ public:
 
     struct key {
         std::string name;
-        uint16_t keyVC;
+        short unsigned int keyVC;
         int x;
         int y;
     };
 
     const static uint16_t KeyOrder[];
 
-    std::vector<key> CreateKeys();
-    //void ReadKeys();
+    void CreateKeys();
+    static std::vector<key> keys;
+    static void ReadKeys();
+    
+    std::thread hook_thread;
 
     ~MainWindow();
 

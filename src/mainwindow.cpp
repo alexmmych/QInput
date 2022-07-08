@@ -83,13 +83,15 @@ const uint16_t MainWindow::KeyOrder[] = {
     VC_SPACE
 };
 
+std::vector<MainWindow::key> MainWindow::keys;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    std::vector<key> keys = CreateKeys();
+    CreateKeys();
 
     //Creates each key
     for (MainWindow::key key : keys) {
@@ -113,30 +115,31 @@ MainWindow::MainWindow(QWidget *parent)
         label->setGeometry(key.x,key.y,img.width(),img.height());
     }
 
+    Hook newHook;
+
     //Make background transparent
     setAttribute(Qt::WA_TranslucentBackground, true);
+    hook_thread = std::thread(&Hook::RunHook,newHook);
 }
-/*
+
 void MainWindow::ReadKeys() {
-    while (true) {
-        std::vector<key>::iterator it = std::find(keys.begin(),keys.end(),Hook::Keycode);
 
-        if (it != keys.end()) {
-            int index = std::distance(keys.begin(),it);
-            std::cout << "Pressed: " << keys.at(index).name << std::endl;
-        }
+    auto it = std::find_if(keys.begin(), keys.end(), [&cm = Hook::Keycode] (const key& m) -> bool {return cm == m.keyVC; });
+
+    if (it != keys.end()) {
+        int index = it - keys.begin();
+         std::cout << "Pressed: " << keys.at(index).name << std::endl;
     }
+    
 }
-*/
 
-std::vector<MainWindow::key> MainWindow::CreateKeys() {
+
+void MainWindow::CreateKeys() {
     //Open Key map
     std::ifstream file("resources/Layout/layer-map.txt");
 
     std::vector<std::string> names;
     std::string input;
-
-    std::vector<MainWindow::key> keys;
 
     std::string KeyName;
     int KeyX;
@@ -178,11 +181,14 @@ std::vector<MainWindow::key> MainWindow::CreateKeys() {
         }
         std::advance(itr,1);
     }
-    return keys;
 }
 
 MainWindow::~MainWindow()
 {
+    Hook::StopHook();
+    
+    hook_thread.join();
+
     delete ui;
 }
 

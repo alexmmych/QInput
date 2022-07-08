@@ -4,7 +4,6 @@
 #include <QDir>
 
 #include <iostream>
-#include <thread>
 
 int main(int argc, char *argv[])
 {
@@ -14,10 +13,6 @@ int main(int argc, char *argv[])
     w.resize(1456,600);
 
     w.show();
-
-    Hook newHook;
-
-    std::thread hook_thread(&Hook::RunHook,newHook);
 
     return a.exec();
 }

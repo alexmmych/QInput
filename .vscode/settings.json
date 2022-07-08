@@ -63,6 +63,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "qmainwindow": "cpp",
-        "qdir": "cpp"
+        "qdir": "cpp",
+        "qapplication": "cpp"
     }
 }
