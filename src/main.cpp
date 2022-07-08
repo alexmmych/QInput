@@ -1,5 +1,4 @@
 #include "include/mainwindow.h"
-#include "include/hook.h"
 
 #include <QApplication>
 #include <QDir>

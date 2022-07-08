@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "hook.h"
+
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -16,9 +18,12 @@ public:
 
     struct key {
         std::string name;
+        uint16_t keyVC;
         int x;
         int y;
     };
+
+    const static uint16_t KeyOrder[];
 
     std::vector<key> CreateKeys();
 

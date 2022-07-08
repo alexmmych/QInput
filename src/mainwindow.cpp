@@ -12,6 +12,77 @@
 #include <iostream>
 #include <iterator>
 
+const uint16_t MainWindow::KeyOrder[] = {
+    VC_ESCAPE,
+    VC_F1,
+    VC_F2,
+    VC_F3,
+    VC_F4,
+    VC_F5,
+    VC_F6,
+    VC_F7,
+    VC_F8,
+    VC_F9,
+    VC_F10,
+    VC_F11,
+    VC_F12,
+    VC_BACKQUOTE,
+    VC_1,
+    VC_2,
+    VC_3,
+    VC_4,
+    VC_5,
+    VC_6,
+    VC_7,
+    VC_8,
+    VC_9,
+    VC_0,
+    VC_MINUS,
+    VC_EQUALS,
+    VC_BACKSPACE,
+    VC_TAB,
+    VC_Q,
+    VC_W,
+    VC_E,
+    VC_R,
+    VC_T,
+    VC_Y,
+    VC_U,
+    VC_I,
+    VC_O,
+    VC_P,
+    VC_OPEN_BRACKET,
+    VC_CLOSE_BRACKET,
+    VC_ENTER,
+    VC_CAPS_LOCK,
+    VC_A,
+    VC_S,
+    VC_D,
+    VC_F,
+    VC_G,
+    VC_H,
+    VC_J,
+    VC_K,
+    VC_L,
+    VC_SEMICOLON,
+    VC_QUOTE,
+    VC_SHIFT_L,
+    VC_Z,
+    VC_X,
+    VC_C,
+    VC_V,
+    VC_B,
+    VC_N,
+    VC_M,
+    VC_COMMA,
+    VC_PERIOD,
+    VC_SLASH,
+    VC_CONTROL_L,
+    VC_META_L,
+    VC_ALT_L,
+    VC_SPACE
+};
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -20,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     std::vector<key> keys = CreateKeys();
 
+    //Creates each key
     for (MainWindow::key key : keys) {
         //Get the resource location
         QString resources = QCoreApplication::applicationDirPath();
@@ -39,6 +111,8 @@ MainWindow::MainWindow(QWidget *parent)
 
         //Set it's position
         label->setGeometry(key.x,key.y,img.width(),img.height());
+
+        std::cout << key.keyVC << std::endl;
     }
 
 
@@ -78,6 +152,7 @@ std::vector<MainWindow::key> MainWindow::CreateKeys() {
         switch(switch_case) {
             case 0: {
                 KeyName = name;
+                std::cout << "Name: " << name << "  At: " << index/3 << std::endl;
                 break;
             }
             case 1: {
@@ -87,9 +162,8 @@ std::vector<MainWindow::key> MainWindow::CreateKeys() {
             case 2: {
                 KeyY = std::stoi(name.substr(0,name.length()-1));
 
-                key keyObj = {KeyName,KeyX,KeyY};
+                key keyObj = {KeyName,MainWindow::KeyOrder[index/3],KeyX,KeyY};
                 keys.push_back(keyObj);
-
                 break;
             }
         }
