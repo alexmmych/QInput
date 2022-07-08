@@ -17,8 +17,7 @@ int main(int argc, char *argv[])
 
     Hook newHook;
 
-    //Will only act after hook_stop()
-    printf("YOU GOT THE RAWCODE: %#06x \n",Hook::Rawcode);
+    std::cout << "Escape Keycode: " << VC_ESCAPE;
 
     return a.exec();
 }

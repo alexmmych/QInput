@@ -4,7 +4,7 @@
 #include <wchar.h>
 #include <stdio.h>
 
-uint16_t Hook::Rawcode;
+uint16_t Hook::Keycode;
 
 bool logger_proc(unsigned int level, const char *format, ...) {
     bool status = false;
@@ -31,7 +31,7 @@ bool logger_proc(unsigned int level, const char *format, ...) {
 void dispatch_proc(uiohook_event * const event) {
 
         if(event->type == EVENT_KEY_RELEASED)
-            std::cout << "Keycode: " << event->data.keyboard.keycode;
+            std::cout << "Keycode: " << event->data.keyboard.keycode << '\n';
         if(event->type == EVENT_KEY_TYPED)
             printf("Keychar: %lc", (wint_t) event->data.keyboard.keychar);
 
@@ -62,11 +62,6 @@ void dispatch_proc(uiohook_event * const event) {
                         break;
                 }
             }
-        case EVENT_KEY_RELEASED:
-        case EVENT_KEY_TYPED:
-            Hook::Rawcode = event->data.keyboard.rawcode;
-            printf("    Rawcode: %#06x \n",Hook::Rawcode);
-            break;
         case EVENT_MOUSE_PRESSED:
                 std::cout << "Mouse Button: " << event->data.mouse.button << "  Mouse Clicks: " << event->data.mouse.clicks << "\n" ;
             break;
@@ -93,8 +88,10 @@ Hook::Hook() {
 
     // Set the event callback for uiohook events.
     hook_set_dispatch_proc(&dispatch_proc);
-    
-    int status = hook_run();
+}
+
+void Hook::RunHook() {
+int status = hook_run();
 
     switch (status) {
         case UIOHOOK_SUCCESS:
