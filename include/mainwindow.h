@@ -26,6 +26,7 @@ public:
     const static uint16_t KeyOrder[];
 
     std::vector<key> CreateKeys();
+    //void ReadKeys();
 
     ~MainWindow();
 

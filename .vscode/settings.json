@@ -62,6 +62,7 @@
         "thread": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "qmainwindow": "cpp"
+        "qmainwindow": "cpp",
+        "qdir": "cpp"
     }
 }

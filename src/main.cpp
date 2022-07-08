@@ -4,6 +4,7 @@
 #include <QDir>
 
 #include <iostream>
+#include <thread>
 
 int main(int argc, char *argv[])
 {
@@ -16,11 +17,7 @@ int main(int argc, char *argv[])
 
     Hook newHook;
 
-    newHook.RunHook();
-
-    if (Hook::Keycode == VC_ESCAPE) { 
-        std::cout << "Escaped" << '\n';
-    }
+    std::thread hook_thread(&Hook::RunHook,newHook);
 
     return a.exec();
 }

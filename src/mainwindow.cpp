@@ -111,14 +111,23 @@ MainWindow::MainWindow(QWidget *parent)
 
         //Set it's position
         label->setGeometry(key.x,key.y,img.width(),img.height());
-
-        std::cout << key.keyVC << std::endl;
     }
-
 
     //Make background transparent
     setAttribute(Qt::WA_TranslucentBackground, true);
 }
+/*
+void MainWindow::ReadKeys() {
+    while (true) {
+        std::vector<key>::iterator it = std::find(keys.begin(),keys.end(),Hook::Keycode);
+
+        if (it != keys.end()) {
+            int index = std::distance(keys.begin(),it);
+            std::cout << "Pressed: " << keys.at(index).name << std::endl;
+        }
+    }
+}
+*/
 
 std::vector<MainWindow::key> MainWindow::CreateKeys() {
     //Open Key map
@@ -169,7 +178,6 @@ std::vector<MainWindow::key> MainWindow::CreateKeys() {
         }
         std::advance(itr,1);
     }
-
     return keys;
 }
 
