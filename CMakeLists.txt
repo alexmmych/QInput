@@ -20,13 +20,29 @@ enable_language(C)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+if (WIN32 OR WIN64)
+    set(UIOHOOK_SOURCE_DIR "windows")
+elseif (APPLE)
+    set(UIOHOOK_SOURCE_DIR "darwin")
+else()
+    set(UIOHOOK_SOURCE_DIR "x11")
+endif()
+
+add_library(libs
+    "src/logger.c"
+    "src/${UIOHOOK_SOURCE_DIR}/input_helper.c"
+    "src/${UIOHOOK_SOURCE_DIR}/input_hook.c"
+    "src/${UIOHOOK_SOURCE_DIR}/post_event.c"
+    "src/${UIOHOOK_SOURCE_DIR}/system_properties.c"
+)
+
 set(PROJECT_SOURCES
+        src/hook.cpp
         src/main.cpp
         src/mainwindow.cpp
         src/mainwindow.ui
-        src/hook.cpp
-        include/mainwindow.h
         include/hook.h
+        include/mainwindow.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -56,19 +72,27 @@ target_link_libraries(keyboard-listener PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 #Include directories
 set(INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(keyboard-listener PRIVATE ${INCLUDE_DIRECTORY})
+target_include_directories(keyboard-listener PUBLIC ${INCLUDE_DIRECTORY})
 
 set(SOURCES src/hook.cpp ${INCLUDE_DIRECTORY}/uiohook.h ${INCLUDE_DIRECTORY}/hook.h)
 
-#Wl rpath
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-rpath, ${CMAKE_CURRENT_BINARY_DIR}/lib/libuiohook.so.1.2.0")
-#add_executable(test ${SOURCES})
+if (UNIX)
+    #Wl rpath
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-rpath, ${CMAKE_CURRENT_BINARY_DIR}/lib/libuiohook.so.1.2.0")
+    #add_executable(test ${SOURCES})
+endif()
 
 #target_include_directories(test PRIVATE ${INCLUDE_DIRECTORY})
 
 #Directories
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+if(WIN32)
+    target_link_libraries(keyboard-listener PRIVATE Advapi32)
+endif()
+
+target_link_libraries(keyboard-listener PRIVATE libs)
 
 
 set_target_properties(keyboard-listener PROPERTIES
@@ -78,6 +102,7 @@ set_target_properties(keyboard-listener PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(keyboard-listener)
