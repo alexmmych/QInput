@@ -47,18 +47,18 @@ public:
         void ReleaseKey();
     };
 
-    const static uint16_t KeyOrder[];
     static std::vector<key> keys;
     static int index;
 
-    std::vector<key> CreateKeys();
-    static void GetIndex();
-    
-    std::thread hook_thread;
+    static void SetIndex();
 
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
+    
+    std::vector<key> CreateKeys();
+    std::thread hook_thread;
+    const static uint16_t KeyOrder[];
 };
 #endif // MAINWINDOW_H

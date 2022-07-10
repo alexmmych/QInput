@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
         //Get the resource location
         QString resources = QCoreApplication::applicationDirPath();
 
-        resources += "/resources/Dark/";
+        resources += "/resources/Inactive/";
         resources += QString::fromStdString(key.name);
 
         QString url = (resources);
@@ -109,14 +109,9 @@ MainWindow::MainWindow(QWidget *parent)
         //Set pressed Pixmap
 
         QString newResource = QCoreApplication::applicationDirPath();
-        newResource += "/resources/Light/";
+        newResource += "/resources/Active/";
 
-        std::string newString = key.name;
-        size_t pos = (newString.find("Dark"));
-
-        newString.replace(pos,4,"Light");
-
-        newResource += QString::fromStdString(newString);
+        newResource += QString::fromStdString(key.name);
         QString newUrl = (newResource);
         QPixmap pressedImg(newUrl);
 
@@ -126,9 +121,9 @@ MainWindow::MainWindow(QWidget *parent)
         keys.push_back(key);
     }
 
-    if (WIN32) {
+    #ifdef _WIN32 
         setWindowFlag(Qt::FramelessWindowHint);
-    }
+    #endif
 
     //Make background transparent
     setAttribute(Qt::WA_TranslucentBackground, true);
@@ -148,7 +143,7 @@ void MainWindow::key::ReleaseKey() {
     label->setPixmap(nonPressed);
 }
 
-void MainWindow::GetIndex() {
+void MainWindow::SetIndex() {
     auto it = std::find_if(MainWindow::keys.begin(), MainWindow::keys.end(), [&cm = Hook::Keycode] (const MainWindow::key& m) -> bool {return cm == m.keyVC; });
         
     if (it != MainWindow::keys.end()) {

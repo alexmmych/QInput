@@ -3,7 +3,7 @@
 from gimpfu import *
 import os
 
-f1 = open('./layer-map.txt', 'w')
+f1 = open('layer-map.txt', 'w')
 
 def getLayers(g):
     for l in g.layers:

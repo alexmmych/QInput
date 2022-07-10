@@ -34,7 +34,7 @@ void dispatch_proc(uiohook_event *const event)
 {
     if (event->type == EVENT_KEY_PRESSED || EVENT_KEY_RELEASED) {
         Hook::Keycode = event->data.keyboard.keycode;
-        MainWindow::GetIndex();
+        MainWindow::SetIndex();
     }
     
     switch (event->type)
