@@ -19,7 +19,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <uiohook.h>
+#include <include/uiohook.h>
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
 
@@ -43,7 +43,7 @@ static Display *xt_disp;
 #endif
 
 #include "input_helper.h"
-#include "logger.h"
+#include <src/logger.h>
 
 #ifdef USE_XRANDR
 static pthread_mutex_t xrandr_mutex = PTHREAD_MUTEX_INITIALIZER;

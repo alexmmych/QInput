@@ -24,7 +24,7 @@
 #endif
 
 #include <stdint.h>
-#include <uiohook.h>
+#include <include/uiohook.h>
 
 #include <xcb/xkb.h>
 #include <X11/XKBlib.h>
@@ -44,7 +44,7 @@
 #pragma message("... Assuming single-head display.")
 #endif
 
-#include "logger.h"
+#include <src/logger.h>
 #include "input_helper.h"
 
 // Thread and hook handles.

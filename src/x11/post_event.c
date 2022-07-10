@@ -19,7 +19,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <uiohook.h>
+#include <include/uiohook.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #ifdef USE_XTEST
@@ -27,7 +27,7 @@
 #endif
 
 #include "input_helper.h"
-#include "logger.h"
+#include <src/logger.h>
 
 #ifndef USE_XTEST
 static long current_modifier_mask = NoEventMask;

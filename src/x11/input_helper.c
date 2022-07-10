@@ -48,7 +48,7 @@ static struct xkb_rule_names xkb_names = {
 #endif
 #endif
 
-#include "logger.h"
+#include <src/logger.h>
 
 #define BUTTON_MAP_MAX 256
 
