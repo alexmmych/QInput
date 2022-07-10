@@ -1,6 +1,7 @@
 # QInput
-
-<img title="" src="file:///C:/QInput/resources/Markdown/QInput.png" alt="" data-align="center">
+<p align="center">
+   <img src="https://github.com/Shroomerian/QInput/blob/main/resources/Markdown/QInput.png">
+</p>
 
 ## What is it?
 
@@ -33,9 +34,10 @@ And these are the specific steps you will need to take to import your own layout
 1) Create your own layout by dragging your key PNG files unto the screen. Layer Groups can be used for convenience but the important part is that the individual layers MUST be named exactly the same as the files in question.
 
 2) Install [LayerCoordinates.py](https://github.com/Shroomerian/QInput/blob/main/resources/Layout/LayerCoordinates.py) as a plugin in GIMP, in order to do so you need to find where GIMP stores plugins Edit->Preferences->Folders->Plug-ins and then copy the file into any of those directories. You can also open the python file in any text editor, copy it and paste it into the Filters->Python-Fu->Console.
-   
-   <img title="" src="file:///C:/QInput/resources/Markdown/Plug-in.png" alt="" data-align="center">
-   
+
+<p align="center">
+   <img src="https://github.com/Shroomerian/QInput/blob/main/resources/Markdown/Plug-in.png">
+</p>
    The Python plugin will generate a layer-map.txt file which will be used by the program to set the position of the keys.
 
 3) Import your individual key PNG files into their respective folders (Active and Inactive)
