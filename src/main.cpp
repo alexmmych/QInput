@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
+    w.setWindowIcon(QIcon("QInput.ico"));
+
     w.resize(1456,600);
 
     w.show();
