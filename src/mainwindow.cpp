@@ -126,6 +126,10 @@ MainWindow::MainWindow(QWidget *parent)
         keys.push_back(key);
     }
 
+    if (WIN32) {
+        setWindowFlag(Qt::FramelessWindowHint);
+    }
+
     //Make background transparent
     setAttribute(Qt::WA_TranslucentBackground, true);
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(keyboard-listener VERSION 0.1 LANGUAGES CXX)
+project(QInput VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -46,33 +46,33 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(keyboard-listener
+    qt_add_executable(QInput
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET keyboard-listener APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET QInput APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(keyboard-listener SHARED
+        add_library(QInput SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(keyboard-listener
+        add_executable(QInput
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(keyboard-listener PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(QInput PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 #Include directories
 set(INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(keyboard-listener PUBLIC ${INCLUDE_DIRECTORY})
+target_include_directories(QInput PUBLIC ${INCLUDE_DIRECTORY})
 
 set(SOURCES src/hook.cpp ${INCLUDE_DIRECTORY}/uiohook.h ${INCLUDE_DIRECTORY}/hook.h)
 
@@ -88,13 +88,12 @@ endif()
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 if(WIN32)
-    target_link_libraries(keyboard-listener PRIVATE Advapi32)
+    target_link_libraries(QInput PRIVATE Advapi32)
 endif()
 
-target_link_libraries(keyboard-listener PRIVATE libs)
+target_link_libraries(QInput PRIVATE libs)
 
-
-set_target_properties(keyboard-listener PROPERTIES
+set_target_properties(QInput PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -104,5 +103,5 @@ set_target_properties(keyboard-listener PROPERTIES
 
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(keyboard-listener)
+    qt_finalize_executable(QInput)
 endif()
