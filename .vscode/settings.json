@@ -64,6 +64,7 @@
         "variant": "cpp",
         "qmainwindow": "cpp",
         "qdir": "cpp",
-        "qapplication": "cpp"
+        "qapplication": "cpp",
+        "cinttypes": "cpp"
     }
 }

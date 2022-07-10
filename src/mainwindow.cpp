@@ -73,7 +73,7 @@ const uint16_t MainWindow::KeyOrder[] = {
 };
 
 std::vector<MainWindow::key> MainWindow::keys;
-QVector<QLabel*> MainWindow::labels;
+int MainWindow::index;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -81,10 +81,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    CreateKeys();
+    std::vector<MainWindow::key> tempKeys = CreateKeys();
 
     //Creates each key
-    for (MainWindow::key key : keys) {
+    for (MainWindow::key key : tempKeys) {
         //Get the resource location
         QString resources = QCoreApplication::applicationDirPath();
 
@@ -104,7 +104,26 @@ MainWindow::MainWindow(QWidget *parent)
         //Set it's position
         label->setGeometry(key.x,key.y,img.width(),img.height());
 
-        MainWindow::labels.append(label);
+        key.label = label;
+
+        //Set pressed Pixmap
+
+        QString newResource = QCoreApplication::applicationDirPath();
+        newResource += "/resources/Light/";
+
+        std::string newString = key.name;
+        size_t pos = (newString.find("Dark"));
+
+        newString.replace(pos,4,"Light");
+
+        newResource += QString::fromStdString(newString);
+        QString newUrl = (newResource);
+        QPixmap pressedImg(newUrl);
+
+        key.nonPressed = img;
+        key.Pressed = pressedImg;
+
+        keys.push_back(key);
     }
 
     //Make background transparent
@@ -115,51 +134,31 @@ MainWindow::MainWindow(QWidget *parent)
 
     //Create hook thread
     hook_thread = std::thread(&Hook::RunHook,newHook);
-
 }
 
-void MainWindow::PressKeys(int index) {
-
-    QString resources = QCoreApplication::applicationDirPath();
-
-    resources += "/resources/Light/";
-
-    std::string newString = keys.at(index).name;
-
-    size_t pos = (newString.find("Dark"));
-
-    newString.replace(pos,4,"Light");
-
-    resources += QString::fromStdString(newString);
-
-    QString url = (resources);
-    QPixmap lightImg(url);
-    QPixmap darkImg = labels[index]->pixmap();
-
-    MainWindow::labels[index]->setPixmap(lightImg);
-
-    usleep(80000);
-
-    MainWindow::labels[index]->setPixmap(darkImg);
+void MainWindow::key::PressKey() {
+    label->setPixmap(Pressed);
 }
 
-void MainWindow::ReadKeys() {
+void MainWindow::key::ReleaseKey() {
+    label->setPixmap(nonPressed);
+}
 
-    auto it = std::find_if(keys.begin(), keys.end(), [&cm = Hook::Keycode] (const key& m) -> bool {return cm == m.keyVC; });
-
-    if (it != keys.end()) {
-        int index = it - keys.begin();
-        std::cout << "Pressed: " << keys.at(index).name << std::endl;
-        PressKeys(index);
+void MainWindow::GetIndex() {
+    auto it = std::find_if(MainWindow::keys.begin(), MainWindow::keys.end(), [&cm = Hook::Keycode] (const MainWindow::key& m) -> bool {return cm == m.keyVC; });
+        
+    if (it != MainWindow::keys.end()) {
+        MainWindow::index = it - MainWindow::keys.begin();
     }
 }
 
 
-void MainWindow::CreateKeys() {
+std::vector<MainWindow::key> MainWindow::CreateKeys() {
     //Open Key map
     std::ifstream file("resources/Layout/layer-map.txt");
 
     std::vector<std::string> names;
+    std::vector<MainWindow::key> tempKeys;
     std::string input;
 
     std::string KeyName;
@@ -195,13 +194,18 @@ void MainWindow::CreateKeys() {
             case 2: {
                 KeyY = std::stoi(name.substr(0,name.length()-1));
 
-                key keyObj = {KeyName,MainWindow::KeyOrder[index/3],KeyX,KeyY};
-                keys.push_back(keyObj);
+                key keyObj;
+                keyObj.name = KeyName;
+                keyObj.keyVC = MainWindow::KeyOrder[index/3];
+                keyObj.x = KeyX;
+                keyObj.y = KeyY;
+                tempKeys.push_back(keyObj);
                 break;
             }
         }
         std::advance(itr,1);
     }
+    return tempKeys;
 }
 
 MainWindow::~MainWindow()

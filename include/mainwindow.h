@@ -18,7 +18,10 @@
 #include <vector>
 #include <iostream>
 #include <iterator>
-#include <unistd.h>
+
+#include <chrono>
+#include <thread>
+
 
 
 QT_BEGIN_NAMESPACE
@@ -35,17 +38,21 @@ public:
     struct key {
         std::string name;
         short unsigned int keyVC;
+        QLabel* label;
+        QPixmap nonPressed;
+        QPixmap Pressed;
         int x;
         int y;
+        void PressKey();
+        void ReleaseKey();
     };
 
     const static uint16_t KeyOrder[];
     static std::vector<key> keys;
-    static QVector<QLabel*> labels;
+    static int index;
 
-    void CreateKeys();
-    static void PressKeys(int index);
-    static void ReadKeys();
+    std::vector<key> CreateKeys();
+    static void GetIndex();
     
     std::thread hook_thread;
 

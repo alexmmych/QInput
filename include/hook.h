@@ -4,6 +4,8 @@ extern "C" {
 #pragma once
 #include "mainwindow.h"
 
+#include <iterator>
+
 class Hook {
 public:
     Hook();

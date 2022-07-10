@@ -32,11 +32,18 @@ bool logger_proc(unsigned int level, const char *format, ...)
 
 void dispatch_proc(uiohook_event *const event)
 {
+    if (event->type == EVENT_KEY_PRESSED || EVENT_KEY_RELEASED) {
+        Hook::Keycode = event->data.keyboard.keycode;
+        MainWindow::GetIndex();
+    }
+    
     switch (event->type)
     {
     case EVENT_KEY_PRESSED:
-        Hook::Keycode = event->data.keyboard.keycode;
-        MainWindow::ReadKeys();
+        MainWindow::keys.at(MainWindow::index).PressKey();
+        break;
+    case EVENT_KEY_RELEASED:
+        MainWindow::keys.at(MainWindow::index).ReleaseKey();
         break;
     case EVENT_MOUSE_PRESSED:
         std::cout << "Mouse Button: " << event->data.mouse.button << "  Mouse Clicks: " << event->data.mouse.clicks << "\n";
@@ -51,7 +58,6 @@ void dispatch_proc(uiohook_event *const event)
     case EVENT_MOUSE_WHEEL:
         std::cout << "Mouse Wheel Rotation: " << event->data.wheel.rotation << "\n";
         break;
-
     default:
         break;
     }

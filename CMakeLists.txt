@@ -78,7 +78,7 @@ set(SOURCES src/hook.cpp ${INCLUDE_DIRECTORY}/uiohook.h ${INCLUDE_DIRECTORY}/hoo
 
 if (UNIX)
     #Wl rpath
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-rpath, ${CMAKE_CURRENT_BINARY_DIR}/lib/libuiohook.so.1.2.0")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-rpath, ${CMAKE_CURRENT_SOURCE_DIR}/lib/libuiohook.so.1.2.0")
     #add_executable(test ${SOURCES})
 endif()
 
@@ -86,7 +86,6 @@ endif()
 
 #Directories
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 if(WIN32)
     target_link_libraries(keyboard-listener PRIVATE Advapi32)
