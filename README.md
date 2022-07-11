@@ -17,7 +17,7 @@ This program uses:
 
 - [GitHub - kwhat/libuiohook: A multi-platform C library to provide global keyboard and mouse hooks from userland.](https://github.com/kwhat/libuiohook)
 
-- MentalCheckpoint's [Xelu's FREE Controller Prompts](https://thoseawesomeguys.com/prompts/)
+- [MentalCheckpoint's](https://www.youtube.com/c/MentalCheckpoint/videos) [Xelu's FREE Controller Prompts](https://thoseawesomeguys.com/prompts/)
 
 ## How to create your own layout?
 
