@@ -11,6 +11,15 @@ QInput is a simple QT application which displays your keyboard input globally. T
 
 The current state of the project is in development and it's only in its initial stage. As of current the application needs some tweaking , mouse support and only supports the en-eu layout.
 
+## Installation
+
+```
+git clone https://github.com/Shroomerian/QInput.git && cd QInput
+mkdir build && cd build  
+cmake -S ..
+cmake --build . 
+```
+
 ## Dependencies and usage
 
 This program uses:
