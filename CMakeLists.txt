@@ -88,7 +88,13 @@ if (UNIX)
     #add_executable(test ${SOURCES})
 endif()
 
+#Copy library files
+file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib/libuiohook.so.1.2.0 DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib/libuiohook.so.1 DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib/libuiohook.so DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 #target_include_directories(test PRIVATE ${INCLUDE_DIRECTORY})
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
 
 #Directories
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
